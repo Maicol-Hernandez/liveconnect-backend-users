@@ -44,10 +44,8 @@ class Response
 
     private function validateType(string $type, $data): void
     {
-        # code...
         switch ($type) {
             case 'raw':
-                # code...
                 $this->raw($data);
                 break;
             case 'json':
@@ -106,14 +104,12 @@ class Response
 
     public function returnData()
     {
-        # code...
         foreach ($this->headers as $header_name => $header_value) {
-            # code...
             header("$header_name: $header_value");
         }
 
         http_response_code($this->status_code);
 
-        echo json_encode($this->response) ;
+        echo json_encode($this->response);
     }
 }

@@ -14,10 +14,10 @@ class Connection extends PDO
 
     public function __construct()
     {
-        $this->host = $_ENV['HOST'];
-        $this->user = $_ENV['USER'];
-        $this->pass = $_ENV['PASS'];
         $this->dbname = $_ENV['DB_NAME'];
+        $this->user = $_ENV['DB_USER'];
+        $this->pass = $_ENV['DB_PASSWORD'];
+        $this->host = $_ENV['DB_HOST'];
         $this->dbtype = $_ENV['DB_TYPE'];
 
         try {

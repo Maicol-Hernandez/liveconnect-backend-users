@@ -87,8 +87,6 @@ class UserController extends Controller
      */
     public function edit(int $id)
     {
-        # code...
-
         return view('json', "edit {$id}", 200);
     }
 
@@ -107,10 +105,7 @@ class UserController extends Controller
      */
     public function delete(int $id, Request $request)
     {
-        # code...
-
         echo "user id ", $id, "\n";
-
 
         return view('raw', 'delete'); // 204 Not Content
     }

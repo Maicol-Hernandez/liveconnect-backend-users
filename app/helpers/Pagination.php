@@ -125,9 +125,7 @@ class Pagination
 
         $aux_is_param = [];
         foreach ($params as $is_param) {
-            # code...
             if ($is_param['value'] === 'true') {
-                # code...
                 $aux_is_param["{$is_param['name']}"]["{$is_param['name']}"] = "&{$is_param['name']}={$is_param['value']}";
                 $aux_is_param["{$is_param['name']}"]["value"] = true;
             } elseif ($is_param['value'] === 'false') {
@@ -215,8 +213,6 @@ class Pagination
     {
         // echo "params ", json_encode($params), "\n";
 
-
-
         $found = [];
 
         // array_filter(
@@ -229,27 +225,20 @@ class Pagination
         // );
 
         foreach ($params as $key => $value) {
-            # code...
             // echo "key ", json_encode($key), "\n";
             // echo "value ", json_encode($value), "\n";
 
         }
         foreach (self::$data as $user) {
-            # code...
             if ($user[$key] && $user[$key]) {
-                # code...
                 array_push($found, $user);
             }
         }
-
-
-
 
         echo "found ", json_encode($found), "\n";
 
         return self::$data;
     }
-
 
     /**
      * @return string url 
@@ -265,7 +254,6 @@ class Pagination
         $path = $_SERVER['REQUEST_URI'];
         foreach (['?', '#'] as $char) {
             if (strpos($path, $char) !== false) {
-                # code...
                 $path = strstr($path, $char, true);
             }
         }
@@ -273,13 +261,3 @@ class Pagination
         return "{$http}{$_SERVER['HTTP_HOST']}{$path}";
     }
 }
-
-
-
-        // $is_active = $_GET['is_active'] ?? null;
-        // $is_admin = $_GET['is_admin'] ?? null;
-
-        // // is active
-        // $is_active = ($is_active === '') ? null : $is_active;
-        // // is admin
-        // $is_admin = ($is_admin === '') ? null : $is_admin;
