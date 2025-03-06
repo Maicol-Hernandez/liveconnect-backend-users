@@ -1,12 +1,10 @@
 <?php
 
-namespace Api\Maicoldev\middlewares;
+namespace App\Middleware;
 
-use Api\Maicoldev\Request;
-
+use App\Request;
 
 abstract class Middleware
 {
-
     abstract public function handle(Request $request): Request;
 }

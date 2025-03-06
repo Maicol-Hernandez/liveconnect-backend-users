@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Maicoldev\Exceptions;
+namespace App\Exceptions;
 
 use Exception;
 

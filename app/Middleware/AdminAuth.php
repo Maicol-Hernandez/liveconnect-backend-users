@@ -1,18 +1,16 @@
 <?php
 
-namespace App\Middlewares;
+namespace App\Middleware;
 
-use Api\Maicoldev\middlewares\Middleware;
-use Api\Maicoldev\Request;
-
+use Exception;
+use App\Request;
+use App\Models\User;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use App\Middleware\Middleware;
+use App\Exceptions\HttpException;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\SignatureInvalidException;
-use Exception;
-use App\Models\User;
-
-use Api\Maicoldev\Exceptions\HttpException;
 
 class AdminAuth extends Middleware
 {

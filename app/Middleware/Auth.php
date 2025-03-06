@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Middlewares;
+namespace App\Middleware;
 
-use Api\Maicoldev\Exceptions\HttpException;
-use Api\Maicoldev\Request;
+use App\Request;
+use App\Exceptions\HttpException;
 
 class Auth
 {

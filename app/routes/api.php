@@ -1,15 +1,14 @@
 <?php
 
-use Api\Maicoldev\Router;
-
-use App\Controllers\UserController;
+use App\Router;
+use App\Middleware\AdminAuth;
+use App\Middleware\BasicAuth;
 use App\Controllers\AuthController;
-use App\Middlewares\BasicAuth;
-use App\Middlewares\AdminAuth;
+use App\Controllers\UserController;
 
 
 Router::get('/', function () {
-    return view('json', 'Hello world');
+    return view('json', 'Hello world api', 200);
 });
 
 // user
@@ -24,5 +23,5 @@ Router::delete('/api/v1/users/(?<id>\d+)', UserController::class . '@delete', Ad
 Router::post('/api/v1/login', AuthController::class . '@auth');
 
 // Router::post('/users', function () {
-//     return new \Api\Maicoldev\Response('json', 'User created succesfulley', 201);
+//     return new \App\Response('json', 'User created succesfulley', 201);
 // });

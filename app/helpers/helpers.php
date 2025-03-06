@@ -1,12 +1,14 @@
 <?php
 
+use App\Response;
+
 if (!function_exists('view')) {
     function view(
         string $type,
         $data = null,
         int $status_code = 200,
         array $headers = []
-    ): Api\Maicoldev\Response {
-        return new Api\Maicoldev\Response($type, $data, $status_code, $headers);
+    ): Response {
+        return new Response($type, $data, $status_code, $headers);
     }
 }

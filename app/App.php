@@ -1,13 +1,12 @@
 <?php
 
-namespace Api\Maicoldev;
-
-use Api\Maicoldev\Router;
-use Api\Maicoldev\Response;
-use Api\Maicoldev\Exceptions\HttpException;
-use Api\Maicoldev\Exceptions\ApiException;
+namespace App;
 
 use Throwable;
+use App\Router;
+use App\Response;
+use App\Exceptions\ApiException;
+use App\Exceptions\HttpException;
 
 
 class App

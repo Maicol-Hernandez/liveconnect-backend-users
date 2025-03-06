@@ -3,7 +3,7 @@
 namespace App\Models;
 
 
-use Api\Maicoldev\Exceptions\HttpException;
+use Api\Instagram\Exceptions\HttpException;
 use App\Utils\UUID;
 use App\Database\Connection;
 
@@ -150,14 +150,6 @@ class User
     }
 
     /**
-     * @param object Post
-     */
-    public function setPublish(Post $post): void
-    {
-        array_push($this->posts, $post);
-    }
-
-    /**
      * @return array users
      */
     public static function getUsers(): array
@@ -216,7 +208,7 @@ class User
     {
         $found = array_filter(
             $this->followers,
-            fn (User $follower) => $follower->id == $user->id,
+            fn(User $follower) => $follower->id == $user->id,
         );
         return count($found) == 1;
     }

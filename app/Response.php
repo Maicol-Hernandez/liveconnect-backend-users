@@ -1,8 +1,8 @@
 <?php
 
-namespace Api\Maicoldev;
+namespace App;
 
-use Api\Maicoldev\Exceptions\ApiException;
+use App\Exceptions\ApiException;
 
 
 class Response

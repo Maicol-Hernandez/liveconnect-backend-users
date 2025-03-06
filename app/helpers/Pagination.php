@@ -2,7 +2,8 @@
 
 namespace App\helpers;
 
-use Api\Maicoldev\Exceptions\HttpException;
+use App\Exceptions\HttpException;
+
 
 class Pagination
 {

@@ -2,9 +2,8 @@
 
 namespace App\Database;
 
-use Api\Maicoldev\Response;
-
 use PDO;
+use App\Response;
 use PDOException;
 
 class Connection extends PDO

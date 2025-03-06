@@ -2,13 +2,12 @@
 
 namespace App\Controllers;
 
-use App\Controllers\Controller;
-use Api\Maicoldev\Exceptions\HttpException;
+use App\Request;
 use App\Models\User;
-use Api\Maicoldev\Request;
-use App\Middlewares\Auth;
-
+use App\Middleware\Auth;
 use App\helpers\Pagination;
+use App\Controllers\Controller;
+use App\Exceptions\HttpException;
 
 
 class UserController extends Controller

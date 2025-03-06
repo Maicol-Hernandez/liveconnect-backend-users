@@ -1,12 +1,12 @@
 <?php
 
-namespace Api\Maicoldev;
+namespace App;
 
-use Api\Maicoldev\Exceptions\RouterException;
-use Api\Maicoldev\Exceptions\HttpException;
+use App\Exceptions\RouterException;
+use App\Exceptions\HttpException;
 
-use Api\Maicoldev\middlewares\Middleware;
-use Api\Maicoldev\Request;
+use App\Middleware\Middleware;
+use App\Request;
 
 /**
  * This class add routes to systema
@@ -114,14 +114,14 @@ class Router
             return $request;
         }
 
-        $middlewares = $middleware;
+        $Middleware = $middleware;
         if (is_string($middleware)) {
-            $middlewares = [$middleware];
+            $Middleware = [$middleware];
         }
 
         unset($middleware);
 
-        foreach ($middlewares as $middleware) {
+        foreach ($Middleware as $middleware) {
             $middleware = new $middleware;
             if (!($middleware instanceof Middleware)) {
                 throw new RouterException("Invalid middleware, must be extends of Api\\Middleware");

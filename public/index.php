@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\App;
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method');
 header('Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS, PUT, DELETE');
@@ -19,5 +21,5 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 
-$app = new Api\Maicoldev\App();
+$app = new App();
 $app->send();

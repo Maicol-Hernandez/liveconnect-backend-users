@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use Api\Maicoldev\Exceptions\HttpException;
 use App\Models\User;
 use Firebase\JWT\JWT;
+use App\Exceptions\HttpException;
 
 /**
  * 

@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Middlewares;
-
-use Api\Maicoldev\middlewares\Middleware;
-use Api\Maicoldev\Request;
-
-use Firebase\JWT\JWT;
-use Firebase\JWT\key;
-use Firebase\JWT\ExpiredException;
-use Firebase\JWT\SignatureInvalidException;
+namespace App\Middleware;
 
 use Exception;
-use Api\Maicoldev\Exceptions\HttpException;
+
+use App\Request;
+use Firebase\JWT\JWT;
+use Firebase\JWT\key;
+use App\Middleware\Middleware;
+use App\Exceptions\HttpException;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\SignatureInvalidException;
 
 class BasicAuth extends Middleware
 {
