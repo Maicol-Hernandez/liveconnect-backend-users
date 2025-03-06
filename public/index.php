@@ -9,7 +9,7 @@ header('Allow: GET, POST, PATCH, OPTIONS, PUT, DELETE');
 
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../app/helpers/helpers.php';
-require __DIR__ . '/../app/routes/web.php';
+require __DIR__ . '/../app/routes/api.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method == 'OPTIONS') {
