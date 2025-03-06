@@ -1,0 +1,77 @@
+services:
+  users-api:
+    build: .
+    container_name: ${APP_NAME}_app
+    restart: unless-stopped
+    tty: true
+    environment:
+      DB_HOST: db
+      DB_NAME: auth_api
+      DB_USER: root
+      DB_PASSWORD: secret
+    env_file:
+      - .env
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  mysql:
+    image: "mysql/mysql-server:8.0"
+    container_name: ${APP_NAME}_mysql
+    restart: always
+    environment:
+      MYSQL_SSL_MODE: DISABLED
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u$$DB_USER",
+          "-p$$DB_PASSWORD",
+        ]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+      
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      SERVER_NAME: localhost
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
+      MEMORY_LIMIT: 1G
+      UPLOAD_LIMIT: 1G
+      MAX_EXECUTION_TIME: 3600
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  mysql_data:
+    driver: local
