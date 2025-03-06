@@ -1,0 +1,27 @@
+{
+    "name": "api/maicoldev",
+    "description": "ApiMaicoldev es un micrip framework pensando en el desarrollo de APIs con arquitectura REST y no depende de ninguna libreria ",
+    "type": "package",
+    "license": "",
+    "authors": [
+        {
+            "name": "Michael Fernando Hernandez Peralta",
+            "email": "maicolhernandez420@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "7.4 - 8.1",
+        "firebase/php-jwt": "dev-main",
+        "vlucas/phpdotenv": "5.5.x-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Api\\Instagram\\": "app/"
+        }
+    },
+    "file": [
+        "app/helpers/helpers.php"
+    ]
+}
