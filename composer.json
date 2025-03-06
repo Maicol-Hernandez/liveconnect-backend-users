@@ -18,7 +18,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Api\\Instagram\\": "app/"
+            "Api\\Maicoldev\\": "app/"
         }
     },
     "file": [
