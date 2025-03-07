@@ -84,4 +84,20 @@ class User
 
         return $user;
     }
+
+    public static function delete(int $id): void
+    {
+        $conn = new Connection();
+        $table = self::TABLE;
+
+        $stmt = $conn->prepare(
+            "DELETE FROM {$table} WHERE id = :id"
+        );
+
+        $stmt->execute([':id' => $id]);
+
+        if ($stmt->rowCount() === 0) {
+            throw new HttpException("User not found", 404);
+        }
+    }
 }

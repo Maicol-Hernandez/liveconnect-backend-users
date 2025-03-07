@@ -46,7 +46,7 @@ class UserController extends Controller
 
             $user = User::create($userData);
 
-            return view('json', ['status' => 'success', 'data' => $user], 201);
+            return view('json', $user, 201);
         } catch (HttpException $e) {
             throw new HttpException($e->getMessage(), 500, $e);
         }
@@ -65,9 +65,10 @@ class UserController extends Controller
         return view('json', []);
     }
 
-    public function destroy(int $id, Request $request): Response
+    public function destroy(int $id): Response
     {
-        echo "user id ", $id, "\n";
-        return view('raw', 'delete'); // 204 Not Content
+        User::delete($id);
+
+        return view('json', 'User deleted', 200);
     }
 }

@@ -15,8 +15,8 @@ Router::get('/', function () {
 Router::get('/api/v1/users', UserController::class . '@index'); //, AdminAuth::class
 Router::post('/api/v1/users', UserController::class . '@store');
 Router::get('/api/v1/users/(?<id>\d+)', UserController::class . '@show');
-Router::put('/api/v1/users/(?<id>\d+)', UserController::class . '@update', BasicAuth::class);
-Router::delete('/api/v1/users/(?<id>\d+)', UserController::class . '@destroy', AdminAuth::class);
+Router::put('/api/v1/users/(?<id>\d+)', UserController::class . '@update'); //, BasicAuth::class
+Router::delete('/api/v1/users/(?<id>\d+)', UserController::class . '@destroy'); //, AdminAuth::class
 
 // login
 Router::post('/api/v1/login', AuthController::class . '@login');
