@@ -4,16 +4,59 @@ namespace App;
 
 class Request
 {
+    private array $data;
+    private array $files;
+    private array $headers;
 
-    private array $data = [];
-
-    public function set(string $key, $value): void
+    public function __construct()
     {
-        $this->data[$key] = $value;
+        $this->data = $this->mergeInputs();
+        $this->files = $_FILES;
+        $this->headers = getallheaders();
     }
 
-    public function all(?string $key = null): array
+    private function mergeInputs(): array
     {
-        return $this->data[$key] ?? null;
+        $input = [];
+
+        if (!empty($_POST)) {
+            $input = $_POST;
+        }
+
+        if ($this->isJson()) {
+            $input = json_decode(file_get_contents('php://input'), true) ?? [];
+        }
+
+        return array_merge($input, $_GET);
+    }
+
+    public function all(): array
+    {
+        return $this->data;
+    }
+
+    public function input(string $key, $default = null)
+    {
+        return $this->data[$key] ?? $default;
+    }
+
+    public function get(string $key, $default = null)
+    {
+        return $this->input($key, $default);
+    }
+
+    public function file(string $key): ?array
+    {
+        return $this->files[$key] ?? null;
+    }
+
+    public function has(string $key): bool
+    {
+        return isset($this->data[$key]);
+    }
+
+    public function isJson(): bool
+    {
+        return strpos($this->headers['Content-Type'] ?? '', 'application/json') !== false;
     }
 }
