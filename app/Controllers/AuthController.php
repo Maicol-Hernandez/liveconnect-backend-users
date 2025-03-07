@@ -2,26 +2,21 @@
 
 namespace App\Controllers;
 
+use App\Response;
 use App\Models\User;
 use Firebase\JWT\JWT;
 use App\Exceptions\HttpException;
 
-/**
- * 
- */
 class AuthController
 {
-    /**
-     * 
-     */
-    public function auth()
+
+    public function login(): Response
     {
         $email = $_POST['email'];
         $password = $_POST['password'];
         $user = new User(null, null, $email, $password, null, null);
 
         if (empty($email) || empty($password)) {
-            // HttpException error 400 Bad request
             throw new HttpException("You must send an email and password", 400);
             exit;
         }
@@ -29,7 +24,6 @@ class AuthController
         $user = User::getUserEmail($user);
 
         if (empty($user)) {
-            // error 404  Not Found
             throw new HttpException("User not found", 404);
         }
 
@@ -59,5 +53,10 @@ class AuthController
         $jwt = JWT::encode($payload, $_ENV['JWT_KEY'], 'HS256');
 
         return view('json', ['token' => $jwt]);
+    }
+
+    public function register(): Response
+    {
+        return view('json', 'register');
     }
 }

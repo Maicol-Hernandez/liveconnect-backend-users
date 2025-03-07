@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+use Exception;
 use App\Request;
+use App\Response;
 use App\Models\User;
 use App\Middleware\Auth;
 use App\helpers\Pagination;
@@ -13,12 +15,19 @@ use App\Exceptions\HttpException;
 class UserController extends Controller
 {
 
-    /**
-     * 
-     */
-    public function create()
+    public function index(): Response
     {
+        try {
+            $users = User::getAll();
 
+            return view('json', ['status' => 'success', 'data' => $users], 200);
+        } catch (Exception $e) {
+            throw new HttpException($e->getMessage(), 500, $e);
+        }
+    }
+
+    public function store(): Response
+    {
         $fields = ['name', 'username', 'email', 'password', 'is_active', 'is_admin'];
 
         foreach ($fields as $field) {
@@ -51,61 +60,22 @@ class UserController extends Controller
         return view('json', "User created succesfulley, id user {$user->create()}", 201); // Satisfactoria 201 Create 
     }
 
-    /**
-     * @return object Users
-     */
-    public function all()
+    public function show(int $id, Request $request): Response
     {
-        $users = User::getAll();
-        foreach ($users as &$user) {
-            unset($user['password']);
-        }
-        unset($user);
-
-        $fields = ['is_active', 'is_admin'];
-
-        return view('json', Pagination::pagination($users, $fields));
-    }
-
-    /**
-     * 
-     */
-    public function show(int $id, Request $request)
-    {
-
         // Auth::isAuth($request);
-
         // $user_id = $request->getData('user_id');
-
-
         return view('json', User::getUserId($id));
     }
 
-    /**
-     * 
-     */
-    public function edit(int $id)
-    {
-        return view('json', "edit {$id}", 200);
-    }
-
-    /**
-     * 
-     */
-    public function update(Request $request)
+    public function update(Request $request): Response
     {
         Auth::isAuth($request);
-
         return view('json', []);
     }
 
-    /**
-     * 
-     */
-    public function delete(int $id, Request $request)
+    public function destroy(int $id, Request $request): Response
     {
         echo "user id ", $id, "\n";
-
         return view('raw', 'delete'); // 204 Not Content
     }
 }

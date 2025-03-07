@@ -12,16 +12,13 @@ Router::get('/', function () {
 });
 
 // user
-Router::get('/api/v1/users', UserController::class . '@all', AdminAuth::class);
+Router::get('/api/v1/users', UserController::class . '@index'); //, AdminAuth::class
+Router::post('/api/v1/users', UserController::class . '@store');
 Router::get('/api/v1/users/(?<id>\d+)', UserController::class . '@show');
-Router::post('/api/v1/users', UserController::class . '@create');
 Router::put('/api/v1/users/(?<id>\d+)', UserController::class . '@update', BasicAuth::class);
-Router::patch('/api/v1/users/(?<id>\d+)', UserController::class . '@edit', BasicAuth::class);
-Router::delete('/api/v1/users/(?<id>\d+)', UserController::class . '@delete', AdminAuth::class);
+Router::delete('/api/v1/users/(?<id>\d+)', UserController::class . '@destroy', AdminAuth::class);
 
 // login
-Router::post('/api/v1/login', AuthController::class . '@auth');
-
-// Router::post('/users', function () {
-//     return new \App\Response('json', 'User created succesfulley', 201);
-// });
+Router::post('/api/v1/login', AuthController::class . '@login');
+// Register
+Router::get('/api/v1/register', AuthController::class . '@register');
