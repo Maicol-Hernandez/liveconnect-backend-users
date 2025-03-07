@@ -55,6 +55,11 @@ class Validator
                     $this->errors[] = "Password must be between 6 and 64 characters";
                 }
                 break;
+            case "array":
+                if (!is_array($value)) {
+                    $this->errors[] = "Field {$field} must be an array";
+                }
+                break;
         }
     }
 }

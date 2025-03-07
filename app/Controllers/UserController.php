@@ -7,7 +7,7 @@ use App\Request;
 use App\Response;
 use App\Models\User;
 use App\Middleware\Auth;
-use App\helpers\Pagination;
+use App\Validation\Validator;
 use App\Controllers\Controller;
 use App\Exceptions\HttpException;
 
@@ -26,45 +26,37 @@ class UserController extends Controller
         }
     }
 
-    public function store(): Response
+    public function store(Request $request): Response
     {
-        $fields = ['name', 'username', 'email', 'password', 'is_active', 'is_admin'];
+        try {
+            $validator = new Validator($request->all(), [
+                'name' => ['required'],
+                'email' => ['required', 'email'],
+                'password' => ['required', 'password'],
+                "pets" => ['required', 'array'],
+            ]);
 
-        foreach ($fields as $field) {
-            # all fiels data
-            if (!isset($_POST[$field])) {
-                # error 400 Bad request
-                throw new HttpException("You must send field {$field}", 400);
-                exit;
-            }
+            $validator->validate();
+
+            $userData = [
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => $request->input('password'),
+            ];
+
+            $user = User::create($userData);
+
+            return view('json', ['status' => 'success', 'data' => $user], 201);
+        } catch (HttpException $e) {
+            throw new HttpException($e->getMessage(), 500, $e);
         }
-
-        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            # error 422 Payment required
-            throw new HttpException("Invalid 'email' format", 422);
-            exit;
-        }
-
-        if (strlen($_POST['password']) < 6 || strlen($_POST['password']) > 64) {
-            # error 422 Payment required
-            throw new HttpException("The 'password' field must be between 6 and 64 characters long", 422);
-            exit;
-        }
-
-        // echo "is_active controller ",$_POST['is_active'] . "\n";
-
-        $user = new User($_POST['name'], $_POST['username'], $_POST['email'], $_POST['password'], $_POST['is_active'], $_POST['is_admin']);
-
-
-
-        return view('json', "User created succesfulley, id user {$user->create()}", 201); // Satisfactoria 201 Create 
     }
 
     public function show(int $id, Request $request): Response
     {
         // Auth::isAuth($request);
         // $user_id = $request->getData('user_id');
-        return view('json', User::getUserId($id));
+        return view('json', User::findById($id));
     }
 
     public function update(Request $request): Response
