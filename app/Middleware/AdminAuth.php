@@ -19,7 +19,7 @@ class AdminAuth extends Middleware
     {
         if (empty($_SERVER['HTTP_AUTHORIZATION'])) {
             // error 422 Unprocessable Entity
-            throw new HttpException("You must send Authorization header", 422);
+            throw new HttpException("You must send Authorization header", 401);
         }
 
         $token = $_SERVER['HTTP_AUTHORIZATION'];
