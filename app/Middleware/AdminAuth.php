@@ -27,7 +27,7 @@ class AdminAuth extends Middleware
         try {
             // we generate a token
             $decoded = JWT::decode($token, new Key($_ENV['JWT_KEY'], 'HS256'));
-            $request->setData('user_id', $decoded->data->id);
+            $request->set('user_id', $decoded->data->id);
         } catch (ExpiredException $e) {
             // error 401 Unauthorized
             throw new HttpException("Your token has expired, please login again", 401);
@@ -39,7 +39,7 @@ class AdminAuth extends Middleware
             throw new HttpException("An error has occurred when you make login, if it persists, please contact");
         }
 
-        $user = User::getUserId($decoded->data->id);
+        $user = User::findById($decoded->data->id);
 
         if (empty($user)) {
             // error 404 Not Found
@@ -48,10 +48,10 @@ class AdminAuth extends Middleware
 
         // if you are an admin equal to 1 = true
         // if you are an admin equal to 0 = false 
-        if ($user->is_admin != true) {
-            // Not admin
-            throw new HttpException("You don't have the require permissions", 403); // error 403 Forbidden 
-        }
+        // if ($user->is_admin != true) {
+        //     // Not admin
+        //     throw new HttpException("You don't have the require permissions", 403); // error 403 Forbidden 
+        // }
 
         return $request;
     }
