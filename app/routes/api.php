@@ -25,4 +25,4 @@ Router::get('/api/v1/pets', PetController::class . '@index');
 // login
 Router::post('/api/v1/login', AuthController::class . '@login');
 // Register
-Router::get('/api/v1/register', AuthController::class . '@register');
+Router::post('/api/v1/register', AuthController::class . '@register');
