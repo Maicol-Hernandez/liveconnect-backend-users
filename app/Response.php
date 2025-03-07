@@ -77,7 +77,14 @@ class Response
         # definimos los headers en el content-type con el application/json; charset=utf-8
         $this->headers['content-type'] = 'application/json; charset=utf-8';
 
-        if ($this->status_code > 399) {
+
+        if ($this->status_code === 422) {
+            $response = [
+                'status' => 'error',
+                "message" => $data['message'],
+                'errors' => $data['errors']
+            ];
+        } else if ($this->status_code > 399) {
             $response = [
                 'status' => 'error',
                 'error' => $data

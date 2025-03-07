@@ -7,7 +7,7 @@ use App\Router;
 use App\Response;
 use App\Exceptions\ApiException;
 use App\Exceptions\HttpException;
-
+use App\Exceptions\ValidationException;
 
 class App
 {
@@ -76,6 +76,13 @@ class App
             $response->returnData();
         } catch (HttpException $e) {
             $response = new Response('json', $e->getMessage(), $e->getCode());
+            $response->returnData();
+        } catch (ValidationException $e) {
+            $response = new Response(
+                'json',
+                ["message" => $e->getMessage(), 'errors' => $e->getErrors()],
+                $e->getCode()
+            );
             $response->returnData();
         } catch (Throwable $e) {
             if ($_ENV['DEBUG_MODE']) {
