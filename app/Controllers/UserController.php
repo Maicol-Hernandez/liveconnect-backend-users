@@ -52,11 +52,9 @@ class UserController extends Controller
         }
     }
 
-    public function show(int $id, Request $request): Response
+    public function show(int $id): Response
     {
-        // Auth::isAuth($request);
-        // $user_id = $request->getData('user_id');
-        return view('json', User::findById($id));
+        return view('json', User::findById($id), 200);
     }
 
     public function update(Request $request): Response
