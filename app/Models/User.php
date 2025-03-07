@@ -65,6 +65,32 @@ class User
         return self::findById($conn->lastInsertId());
     }
 
+    public static function update(int $userId, array $userDetails): array
+    {
+        $connection = new Connection();
+        $tableName = self::TABLE;
+
+        $user = self::findById($userId);
+        if ($user['email'] !== $userDetails['email']) {
+            self::checkExistingUser($userDetails['email']);
+        }
+
+        $hashedPassword = password_hash($userDetails['password'], PASSWORD_DEFAULT);
+
+        $updateQuery = $connection->prepare(
+            "UPDATE {$tableName} SET name = :name, email = :email, password = :password WHERE id = :id"
+        );
+
+        $updateQuery->execute([
+            ':name' => $userDetails['name'],
+            ':email' => $userDetails['email'],
+            ':password' => $hashedPassword,
+            ':id' => $userId,
+        ]);
+
+        return self::findById($userId);
+    }
+
     public static function findById(int $id): array
     {
         $conn = new Connection();

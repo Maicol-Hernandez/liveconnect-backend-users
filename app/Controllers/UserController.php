@@ -20,7 +20,7 @@ class UserController extends Controller
         try {
             $users = User::getAll();
 
-            return view('json', ['status' => 'success', 'data' => $users], 200);
+            return view('json',  $users, 200);
         } catch (Exception $e) {
             throw new HttpException($e->getMessage(), 500, $e);
         }
@@ -57,10 +57,30 @@ class UserController extends Controller
         return view('json', User::findById($id), 200);
     }
 
-    public function update(Request $request): Response
+    public function update(int $id, Request $request): Response
     {
-        Auth::isAuth($request);
-        return view('json', []);
+        try {
+            $validator = new Validator($request->all(), [
+                'name' => ['required'],
+                'email' => ['required', 'email'],
+                'password' => ['required', 'password'],
+                "pets" => ['required', 'array'],
+            ]);
+
+            $validator->validate();
+
+            $userData = [
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => $request->input('password'),
+            ];
+
+            $user = User::update($id, $userData);
+
+            return view('json', $user, 200);
+        } catch (HttpException $e) {
+            throw new HttpException($e->getMessage(), 500, $e);
+        }
     }
 
     public function destroy(int $id): Response
