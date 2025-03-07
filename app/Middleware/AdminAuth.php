@@ -27,7 +27,7 @@ class AdminAuth extends Middleware
         try {
             // we generate a token
             $decoded = JWT::decode($token, new Key($_ENV['JWT_KEY'], 'HS256'));
-            $request->set('user_id', $decoded->data->id);
+            $request->input('user_id', $decoded->data->id);
         } catch (ExpiredException $e) {
             // error 401 Unauthorized
             throw new HttpException("Your token has expired, please login again", 401);

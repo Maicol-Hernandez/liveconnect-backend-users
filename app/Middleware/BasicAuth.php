@@ -24,7 +24,7 @@ class BasicAuth extends Middleware
 
         try {
             $decoded = JWT::decode($token, new Key($_ENV['JWT_KEY'], 'HS256'));
-            $request->set('user_id', $decoded->data->id);
+            $request->input('user_id', $decoded->data->id);
             return $request;
         } catch (ExpiredException $e) {
             // error 401 Unauthorized
