@@ -7,12 +7,12 @@ class Request
 
     private array $data = [];
 
-    public function setData(string $key, $value): void
+    public function set(string $key, $value): void
     {
         $this->data[$key] = $value;
     }
 
-    public function getData(string $key): array
+    public function all(?string $key = null): array
     {
         return $this->data[$key] ?? null;
     }
