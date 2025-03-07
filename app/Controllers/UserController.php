@@ -5,12 +5,14 @@ namespace App\Controllers;
 use Exception;
 use App\Request;
 use App\Response;
+use App\Models\Pet;
 use App\Models\User;
 use App\Middleware\Auth;
+use App\Database\Connection;
 use App\Validation\Validator;
 use App\Controllers\Controller;
 use App\Exceptions\HttpException;
-
+use App\Models\PetUser;
 
 class UserController extends Controller
 {
@@ -28,6 +30,7 @@ class UserController extends Controller
 
     public function store(Request $request): Response
     {
+        Connection::getInstance()->beginTransaction();
         try {
             $validator = new Validator($request->all(), [
                 'name' => ['required'],
@@ -45,9 +48,13 @@ class UserController extends Controller
             ];
 
             $user = User::create($userData);
+            PetUser::createBulk($user['id'], $request->input('pets'));
+
+            Connection::getInstance()->commit();
 
             return view('json', $user, 201);
         } catch (HttpException $e) {
+            Connection::getInstance()->rollback();
             throw new HttpException($e->getMessage(), 500, $e);
         }
     }

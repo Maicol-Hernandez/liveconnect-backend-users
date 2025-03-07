@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use PDO;
-use PDOException;
 use App\Database\Connection;
 use App\Exceptions\HttpException;
 
@@ -13,10 +12,9 @@ class User
 
     public static function getAll(): array
     {
-        $conn = new Connection();
         $table = self::TABLE;
 
-        $stmt = $conn->prepare(
+        $stmt = Connection::getInstance()->prepare(
             "SELECT id, name, email, password, created_at, updated_at FROM {$table} ORDER BY created_at DESC"
         );
 
@@ -27,10 +25,9 @@ class User
 
     public static function checkExistingUser(string $email): void
     {
-        $conn = new Connection();
         $table = self::TABLE;
 
-        $stmt = $conn->prepare(
+        $stmt = Connection::getInstance()->prepare(
             "SELECT COUNT(*) FROM {$table} WHERE email = :email"
         );
 
@@ -45,14 +42,13 @@ class User
 
     public static function create(array $userData): array
     {
-        $conn = new Connection();
         $table = self::TABLE;
 
         self::checkExistingUser($userData['email']);
 
         $hashedPassword = password_hash($userData['password'], PASSWORD_DEFAULT);
 
-        $stmt = $conn->prepare(
+        $stmt = Connection::getInstance()->prepare(
             "INSERT INTO {$table} (name, email, password) VALUES (:name, :email, :password)"
         );
 
@@ -62,12 +58,11 @@ class User
             ':password' => $hashedPassword,
         ]);
 
-        return self::findById($conn->lastInsertId());
+        return self::findById(Connection::getInstance()->lastInsertId());
     }
 
     public static function update(int $userId, array $userDetails): array
     {
-        $connection = new Connection();
         $tableName = self::TABLE;
 
         $user = self::findById($userId);
@@ -77,7 +72,7 @@ class User
 
         $hashedPassword = password_hash($userDetails['password'], PASSWORD_DEFAULT);
 
-        $updateQuery = $connection->prepare(
+        $updateQuery = Connection::getInstance()->prepare(
             "UPDATE {$tableName} SET name = :name, email = :email, password = :password WHERE id = :id"
         );
 
@@ -93,10 +88,9 @@ class User
 
     public static function findById(int $id): array
     {
-        $conn = new Connection();
         $table = self::TABLE;
 
-        $stmt = $conn->prepare(
+        $stmt = Connection::getInstance()->prepare(
             "SELECT id, name, email, created_at, updated_at FROM {$table} WHERE id = :id"
         );
 
@@ -113,10 +107,9 @@ class User
 
     public static function delete(int $id): void
     {
-        $conn = new Connection();
         $table = self::TABLE;
 
-        $stmt = $conn->prepare(
+        $stmt = Connection::getInstance()->prepare(
             "DELETE FROM {$table} WHERE id = :id"
         );
 
