@@ -44,4 +44,26 @@ class PetUser
             throw $e;
         }
     }
+
+    public static function deleteBulk(int $userId, ?array &$petIds = null): bool
+    {
+        try {
+            $sql = sprintf(
+                'DELETE FROM %s WHERE user_id = ?',
+                self::TABLE
+            );
+
+            $stmt = Connection::getInstance()->prepare($sql);
+            $stmt->execute([$userId]);
+
+            return true;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public static function updateBulk(int $userId, array $petIds): bool
+    {
+        return self::deleteBulk($userId) && self::createBulk($userId, $petIds);
+    }
 }

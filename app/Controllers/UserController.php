@@ -66,6 +66,7 @@ class UserController extends Controller
 
     public function update(int $id, Request $request): Response
     {
+        Connection::getInstance()->beginTransaction();
         try {
             $validator = new Validator($request->all(), [
                 'name' => ['required'],
@@ -83,9 +84,13 @@ class UserController extends Controller
             ];
 
             $user = User::update($id, $userData);
+            PetUser::updateBulk($user['id'], $request->input('pets'));
+
+            Connection::getInstance()->commit();
 
             return view('json', $user, 200);
         } catch (HttpException $e) {
+            Connection::getInstance()->rollback();
             throw new HttpException($e->getMessage(), 500, $e);
         }
     }
