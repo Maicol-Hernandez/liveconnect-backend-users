@@ -20,9 +20,9 @@ class Response
     ) {
         $this->status_code = $status_code;
 
-        Response::headersTolower($headers);
-        Response::validateStatusCode($this->status_code);
-        Response::validateType($type, $data);
+        self::headersTolower($headers);
+        self::validateStatusCode($this->status_code);
+        self::validateType($type, $data);
     }
 
     private static function headersTolower(array $headers): void
@@ -57,9 +57,7 @@ class Response
                 break;
 
             default:
-                # we respond with an exception
                 throw new ApiException("Invalid Response Type {$type}, only valids are raw, json and html");
-                break;
         }
     }
 
