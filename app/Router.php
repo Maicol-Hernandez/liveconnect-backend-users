@@ -2,11 +2,10 @@
 
 namespace App;
 
-use App\Exceptions\RouterException;
-use App\Exceptions\HttpException;
-
-use App\Middleware\Middleware;
 use App\Request;
+use App\Middleware\Middleware;
+use App\Exceptions\HttpException;
+use App\Exceptions\RouterException;
 
 /**
  * This class add routes to systema
