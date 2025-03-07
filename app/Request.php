@@ -10,9 +10,9 @@ class Request
 
     public function __construct()
     {
-        $this->data = $this->mergeInputs();
         $this->files = $_FILES;
         $this->headers = getallheaders();
+        $this->data = $this->mergeInputs();
     }
 
     private function mergeInputs(): array
