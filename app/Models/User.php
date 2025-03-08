@@ -8,7 +8,7 @@ use App\Exceptions\HttpException;
 
 class User
 {
-    private const TABLE = "api_users.users";
+    private const TABLE = "users";
 
     public static function getAll(): array
     {
