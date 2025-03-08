@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Throwable;
 
 
 class ValidationException extends Exception
@@ -13,7 +14,7 @@ class ValidationException extends Exception
         string $message = "",
         $code = 422,
         array $errors = [],
-        ?Exception $previous = null
+        ?Throwable $previous = null
 
     ) {
         parent::__construct($message, $code, $previous);
