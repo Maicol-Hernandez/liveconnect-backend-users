@@ -21,7 +21,7 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: ${APP_NAME}_mysql
+    # container_name: ${APP_NAME}_mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -55,7 +55,7 @@ services:
     ports:
       - "8081:80"
     environment:
-      PMA_HOST: ${DB_HOST}
+      PMA_HOST: ${DB_CONNECTION}
       PMA_USER: ${DB_USERNAME}
       PMA_PASSWORD: ${DB_PASSWORD}
     depends_on:
