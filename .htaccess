@@ -1,5 +1,40 @@
+# Activar el motor de reescritura
 RewriteEngine On
+
+# Establecer la base para reescrituras (ajusta según tu estructura de directorios)
+RewriteBase /
+
+# Redirigir todas las solicitudes raíz al directorio public/
 RewriteRule ^$ public/ [L]
+
+# Manejar solicitudes a archivos/directorios existentes
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ public/$1 [L]
+
+# Redirigir todas las demás solicitudes al front controller
+RewriteRule ^(.*)$ public/index.php?url=$1 [L,QSA]
+
+# Configuración adicional recomendada
+# --------------------------------------------------
+# Establecer index.php como documento principal
+DirectoryIndex public/index.php
+
+# Proteger archivos sensibles
+<FilesMatch "\.(env|log|sql|htaccess)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Mejoras de rendimiento y seguridad
+# --------------------------------------------------
+# Comprimir recursos
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript
+</IfModule>
+
+# Configurar cabeceras de seguridad
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
