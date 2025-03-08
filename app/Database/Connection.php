@@ -7,6 +7,8 @@ namespace App\Database;
 use PDO;
 use PDOException;
 use PDOStatement;
+use RuntimeException;
+use Throwable;
 
 class Connection
 {
@@ -17,13 +19,15 @@ class Connection
     {
         try {
             $this->connection = new PDO(
-                "mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_DATABASE']};charset=utf8",
+                "mysql:host={$_ENV['DB_CONNECTION']};dbname={$_ENV['DB_DATABASE']};charset=utf8",
                 $_ENV['DB_USERNAME'],
                 $_ENV['DB_PASSWORD']
             );
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            throw new \RuntimeException("An error has ocurred and cannot connect to the database:{$e->getMessage()}", 503, $e);
+            throw new RuntimeException("An error has ocurred and cannot connect to the database:{$e->getMessage()}", 503, $e);
+        } catch (Throwable $th) {
+            throw new RuntimeException("An error has ocurred and cannot connect to the database:{$th->getMessage()}", 503, $th);
         }
     }
 

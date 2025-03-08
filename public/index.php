@@ -17,8 +17,9 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method == 'OPTIONS') {
     die();
 }
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 
 $app = new App();
