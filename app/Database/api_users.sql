@@ -2,9 +2,9 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: mysql
--- Tiempo de generación: 07-03-2025 a las 13:03:00
--- Versión del servidor: 8.0.32
+-- Servidor: 172.18.0.1
+-- Tiempo de generación: 08-03-2025 a las 01:13:29
+-- Versión del servidor: 8.0.41
 -- Versión de PHP: 8.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `pets` (
   `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -56,14 +56,6 @@ CREATE TABLE `pet_user` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `pet_user`
---
-
-INSERT INTO `pet_user` (`user_id`, `pet_id`, `created_at`) VALUES
-(13, 2, '2025-03-07 13:02:06'),
-(13, 4, '2025-03-07 13:02:06');
-
 -- --------------------------------------------------------
 
 --
@@ -84,8 +76,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'root', 'root@gmail.com', '$2y$10$CHYfJ8QM3Fc39Q0x93R9sertBlTBVJFFNjQ9Jvgy4.oID9sWbvsm2', '2025-03-07 03:29:45', '2025-03-07 03:29:45'),
-(13, 'root1', 'root4@gmail.com', '$2y$10$4oblcoNRKa2p3GCpajBtW.5oHo27WDJt/i5YzyV.xAP8h4uIRTE2y', '2025-03-07 13:02:06', '2025-03-07 13:02:06');
+(1, 'root', 'root@gmail.com', '$2y$10$CHYfJ8QM3Fc39Q0x93R9sertBlTBVJFFNjQ9Jvgy4.oID9sWbvsm2', '2025-03-07 03:29:45', '2025-03-07 03:29:45');
 
 --
 -- Índices para tablas volcadas
