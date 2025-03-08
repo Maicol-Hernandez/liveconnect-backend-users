@@ -60,7 +60,7 @@ class AuthController
         try {
             $validator = new Validator($request->all(), [
                 'name' => ['required'],
-                'email' => ['required', 'email'],
+                'email' => ['required', 'email', 'unique'],
                 'password' => ['required', 'password'],
                 "pets" => ['required', 'array'],
             ]);
@@ -79,9 +79,9 @@ class AuthController
             Connection::getInstance()->commit();
 
             return view('json', $user, 201);
-        } catch (HttpException $e) {
+        } catch (Throwable $th) {
             Connection::getInstance()->rollback();
-            throw new HttpException($e->getMessage(), 500, $e);
+            throw new HttpException($th->getMessage(), 500, $th);
         }
     }
 }

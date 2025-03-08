@@ -13,6 +13,7 @@ use App\Validation\Validator;
 use App\Controllers\Controller;
 use App\Exceptions\HttpException;
 use App\Models\PetUser;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -34,7 +35,7 @@ class UserController extends Controller
         try {
             $validator = new Validator($request->all(), [
                 'name' => ['required'],
-                'email' => ['required', 'email'],
+                'email' => ['required', 'email', 'unique'],
                 'password' => ['required', 'password'],
                 "pets" => ['required', 'array'],
             ]);
@@ -53,9 +54,9 @@ class UserController extends Controller
             Connection::getInstance()->commit();
 
             return view('json', $user, 201);
-        } catch (HttpException $e) {
+        } catch (Throwable $th) {
             Connection::getInstance()->rollback();
-            throw new HttpException($e->getMessage(), 500, $e);
+            throw new HttpException($th->getMessage(), 500, $th);
         }
     }
 
@@ -89,9 +90,9 @@ class UserController extends Controller
             Connection::getInstance()->commit();
 
             return view('json', $user, 200);
-        } catch (HttpException $e) {
+        } catch (Throwable $th) {
             Connection::getInstance()->rollback();
-            throw new HttpException($e->getMessage(), 500, $e);
+            throw new HttpException($th->getMessage(), 500, $th);
         }
     }
 

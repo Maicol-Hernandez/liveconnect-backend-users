@@ -64,6 +64,12 @@ class Validator
                 if (!User::existsByEmail($value)) {
                     $this->errors[] = "{$field} does not exist";
                 }
+                break;
+            case 'unique':
+                if (User::existsByEmail($value)) {
+                    $this->errors[] = "{$field} already exists";
+                }
+                break;
         }
     }
 }
