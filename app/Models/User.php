@@ -23,28 +23,21 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function checkExistingUser(string $email): void
+    public static function existsByEmail(string $email): bool
     {
         $table = self::TABLE;
+        $stmt = Connection::getInstance()
+            ->prepare("SELECT COUNT(*) FROM $table WHERE email = :email");
+        $stmt->execute([':email' => $email]);
 
-        $stmt = Connection::getInstance()->prepare(
-            "SELECT COUNT(*) FROM {$table} WHERE email = :email"
-        );
-
-        $stmt->execute([
-            ':email' => $email,
-        ]);
-
-        if ($stmt->fetchColumn() > 0) {
-            throw new HttpException("Email already exists", 409);
-        }
+        return (bool) $stmt->fetchColumn();
     }
 
     public static function create(array $userData): array
     {
         $table = self::TABLE;
 
-        self::checkExistingUser($userData['email']);
+        self::existsByEmail($userData['email']);
 
         $hashedPassword = password_hash($userData['password'], PASSWORD_DEFAULT);
 
@@ -67,7 +60,7 @@ class User
 
         $user = self::findById($userId);
         if ($user['email'] !== $userDetails['email']) {
-            self::checkExistingUser($userDetails['email']);
+            self::existsByEmail($userDetails['email']);
         }
 
         $hashedPassword = password_hash($userDetails['password'], PASSWORD_DEFAULT);
@@ -86,12 +79,31 @@ class User
         return self::findById($userId);
     }
 
+    public static function findByEmail(string $email): array
+    {
+        $table = self::TABLE;
+
+        $stmt = Connection::getInstance()->prepare(
+            "SELECT id, name, email, password, created_at, updated_at FROM {$table} WHERE email = :email"
+        );
+
+        $stmt->execute([':email' => $email]);
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            throw new HttpException("User not found with email {$email}", 404);
+        }
+
+        return $user;
+    }
+
     public static function findById(int $id): array
     {
         $table = self::TABLE;
 
         $stmt = Connection::getInstance()->prepare(
-            "SELECT id, name, email, created_at, updated_at FROM {$table} WHERE id = :id"
+            "SELECT id, name, email, password, created_at, updated_at FROM {$table} WHERE id = :id"
         );
 
         $stmt->execute([':id' => $id]);
@@ -118,5 +130,13 @@ class User
         if ($stmt->rowCount() === 0) {
             throw new HttpException("User not found", 404);
         }
+    }
+
+    public static function verifyPassword(array $user, string $password): bool
+    {
+        $hashedPassword = $user['password'];
+
+        return password_verify($password, $hashedPassword) &&
+            password_needs_rehash($hashedPassword, PASSWORD_DEFAULT);
     }
 }

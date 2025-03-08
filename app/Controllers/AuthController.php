@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Throwable;
 use App\Request;
 use App\Response;
 use App\Models\User;
@@ -10,53 +11,47 @@ use App\Models\PetUser;
 use App\Database\Connection;
 use App\Validation\Validator;
 use App\Exceptions\HttpException;
+use Exception;
 
 class AuthController
 {
 
-    public function login(): Response
+    private function generateJwtToken(array $user, ?int $issuedAt = null, int $expiresIn = 2400): string
     {
-        // $email = $_POST['email'];
-        // $password = $_POST['password'];
-        // $user = new User(null, null, $email, $password, null, null);
+        $currentTime = $issuedAt ?? time();
+        $payload = [
+            'data' => [
+                'id' => $user['id'],
+            ],
+            'iat' => $currentTime,
+            'exp' => $currentTime + $expiresIn // Token válido por el tiempo especificado
+        ];
 
-        // if (empty($email) || empty($password)) {
-        //     throw new HttpException("You must send an email and password", 400);
-        //     exit;
-        // }
+        return JWT::encode($payload, $_ENV['JWT_KEY'], 'HS256');
+    }
 
-        // User::checkExistingUser("root@gmail.com");
+    public function login(Request $request): Response
+    {
+        try {
+            $validator = new Validator($request->all(), [
+                'email' => ['required', 'email', 'exists'],
+                'password' => ['required', 'password'],
+            ]);
 
-        // if (empty($user)) {
-        //     throw new HttpException("User not found", 404);
-        // }
+            $validator->validate();
 
-        // // if active is equal to 0 = false 
-        // // if active is equal to 1 = true
-        // if ($user['is_active'] === false) {
-        //     // Not active
-        //     throw new HttpException("Inactive user", 400); // error 400 Bad Requets
-        // }
+            $user = User::findByEmail($request->get('email'));
 
-        // if (!password_verify($password, $user['password'])) {
-        //     // error 400 Bad Requets
-        //     throw new HttpException("Invalid user or password", 400);
-        // }
+            if (User::verifyPassword($user, $request->get('password'))) {
+                throw new HttpException("Invalid user or password", 400);
+            }
 
-        // $time = time();
+            $token = $this->generateJwtToken($user, time());
 
-        // $payload = [
-        //     'data' => [
-        //         'id' => $user['id'],
-        //     ],
-        //     'iat' => $time,
-        //     'exp' => $time + (60 * 40)
-        // ];
-
-        // // echo json_encode($payload);
-        // $jwt = JWT::encode($payload, $_ENV['JWT_KEY'], 'HS256');
-
-        return view('json', ['token' => '']);
+            return view('json', [...$user, 'token' => $token], 200);
+        } catch (Throwable $th) {
+            throw new HttpException($th->getMessage(), 500, $th);
+        }
     }
 
     public function register(Request $request): Response

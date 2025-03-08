@@ -2,6 +2,7 @@
 
 namespace App\Validation;
 
+use App\Models\User;
 use App\Exceptions\ValidationException;
 
 class Validator
@@ -39,11 +40,10 @@ class Validator
 
         switch ($validation) {
             case 'required':
-                if ($value === null || $value === '') {
+                if (is_null($value) || empty($value)) {
                     $this->errors[] = "Field {$field} is required";
                 }
                 break;
-
             case 'email':
                 if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
                     $this->errors[] = "Invalid email format for {$field}";
@@ -55,11 +55,15 @@ class Validator
                     $this->errors[] = "Password must be between 6 and 64 characters";
                 }
                 break;
-            case "array":
+            case 'array':
                 if (!is_array($value)) {
                     $this->errors[] = "Field {$field} must be an array";
                 }
                 break;
+            case 'exists':
+                if (!User::existsByEmail($value)) {
+                    $this->errors[] = "{$field} does not exist";
+                }
         }
     }
 }
