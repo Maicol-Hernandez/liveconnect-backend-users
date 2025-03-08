@@ -13,8 +13,6 @@ services:
       - "8080:8080"
     volumes:
       - ./:/var/www/html
-      # - /var/www/html/vendor
-      - ./vendor:/var/www/html/vendor
     depends_on:
       mysql:
         condition: service_healthy
@@ -22,16 +20,19 @@ services:
       - app-network
 
   mysql:
-    image: "mysql/mysql-server:8.0"
+    image: mysql:8.0
     container_name: ${APP_NAME}_mysql
     environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./app/Database:/docker-entrypoint-initdb.d
     networks:
       - app-network
     healthcheck:
@@ -47,7 +48,7 @@ services:
         ]
       interval: 5s
       timeout: 10s
-      retries: 3
+      retries: 5
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -57,6 +58,8 @@ services:
       PMA_HOST: ${DB_HOST}
       PMA_USER: ${DB_USERNAME}
       PMA_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - mysql
     networks:
       - app-network
 
