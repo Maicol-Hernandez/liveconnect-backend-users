@@ -51,11 +51,9 @@ class Response
             case 'json':
                 $this->json($data);
                 break;
-
             case 'html';
                 $this->html($data);
                 break;
-
             default:
                 throw new ApiException("Invalid Response Type {$type}, only valids are raw, json and html");
         }
