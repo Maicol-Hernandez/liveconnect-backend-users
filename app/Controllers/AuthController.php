@@ -57,7 +57,6 @@ class AuthController
             'name' => ['required'],
             'email' => ['required', 'email', 'unique'],
             'password' => ['required', 'password', 'confirmed'],
-            // 'password_confirmation' => ['required', 'password'],
             "pets" => ['required', 'array'],
         ]);
 
