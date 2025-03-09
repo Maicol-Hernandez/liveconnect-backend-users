@@ -71,12 +71,12 @@ class Validator
                 }
                 break;
             case 'confirmed':
-                if (!isset($this->data["{$field}_confirmation"])) {
+                if (!isset($this->data["{$field}_confirm"])) {
                     $this->errors[] = 'Password confirmation field is required';
                     break;
                 }
 
-                if ($value !== $this->data["{$field}_confirmation"]) {
+                if ($value !== $this->data["{$field}_confirm"]) {
                     $this->errors[] = 'Passwords do not match';
                 }
                 break;
