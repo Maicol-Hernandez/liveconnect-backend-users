@@ -59,4 +59,9 @@ class Request
     {
         return strpos($this->headers['Content-Type'] ?? '', 'application/json') !== false;
     }
+
+    public function header(string $headerName, $defaultValue = null): mixed
+    {
+        return $this->headers[$headerName] ?? $defaultValue;
+    }
 }
