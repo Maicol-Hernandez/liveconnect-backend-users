@@ -70,6 +70,10 @@ class Validator
                     $this->errors[] = "{$field} already exists";
                 }
                 break;
+            case 'confirmed':
+                if ($value !== $this->data["{$field}_confirmation"] ?? null) {
+                    $this->errors[] = 'Passwords do not match';
+                }
         }
     }
 }

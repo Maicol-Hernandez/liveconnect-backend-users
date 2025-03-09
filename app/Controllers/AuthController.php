@@ -29,14 +29,14 @@ class AuthController
 
     public function login(Request $request): Response
     {
+        $validator = new Validator($request->all(), [
+            'email' => ['required', 'email', 'exists'],
+            'password' => ['required', 'password'],
+        ]);
+
+        $validator->validate();
+
         try {
-            $validator = new Validator($request->all(), [
-                'email' => ['required', 'email', 'exists'],
-                'password' => ['required', 'password'],
-            ]);
-
-            $validator->validate();
-
             $user = User::findByEmail($request->get('email'));
 
             if (User::verifyPassword($user, $request->get('password'))) {
@@ -53,17 +53,18 @@ class AuthController
 
     public function register(Request $request): Response
     {
+        $validator = new Validator($request->all(), [
+            'name' => ['required'],
+            'email' => ['required', 'email', 'unique'],
+            'password' => ['required', 'password', 'confirmed'],
+            // 'password_confirmation' => ['required', 'password'],
+            "pets" => ['required', 'array'],
+        ]);
+
+        $validator->validate();
+
         Connection::getInstance()->beginTransaction();
         try {
-            $validator = new Validator($request->all(), [
-                'name' => ['required'],
-                'email' => ['required', 'email', 'unique'],
-                'password' => ['required', 'password'],
-                "pets" => ['required', 'array'],
-            ]);
-
-            $validator->validate();
-
             $userData = [
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),

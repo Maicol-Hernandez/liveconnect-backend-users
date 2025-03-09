@@ -31,17 +31,17 @@ class UserController extends Controller
 
     public function store(Request $request): Response
     {
+        $validator = new Validator($request->all(), [
+            'name' => ['required'],
+            'email' => ['required', 'email', 'unique'],
+            'password' => ['required', 'password'],
+            "pets" => ['required', 'array'],
+        ]);
+
+        $validator->validate();
+
         Connection::getInstance()->beginTransaction();
         try {
-            $validator = new Validator($request->all(), [
-                'name' => ['required'],
-                'email' => ['required', 'email', 'unique'],
-                'password' => ['required', 'password'],
-                "pets" => ['required', 'array'],
-            ]);
-
-            $validator->validate();
-
             $userData = [
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
@@ -67,17 +67,17 @@ class UserController extends Controller
 
     public function update(int $id, Request $request): Response
     {
+        $validator = new Validator($request->all(), [
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'password'],
+            "pets" => ['required', 'array'],
+        ]);
+
+        $validator->validate();
+
         Connection::getInstance()->beginTransaction();
         try {
-            $validator = new Validator($request->all(), [
-                'name' => ['required'],
-                'email' => ['required', 'email'],
-                'password' => ['required', 'password'],
-                "pets" => ['required', 'array'],
-            ]);
-
-            $validator->validate();
-
             $userData = [
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
