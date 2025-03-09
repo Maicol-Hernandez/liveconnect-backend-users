@@ -19,9 +19,8 @@ if ($method == 'OPTIONS') {
     die();
 }
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->safeLoad();
-
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
 
 $app = new App();
 $app->send();
