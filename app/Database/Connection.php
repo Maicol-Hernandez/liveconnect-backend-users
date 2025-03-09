@@ -14,20 +14,33 @@ class Connection
 {
     private static ?PDO $instance = null;
     private PDO $connection;
+    private array $config;
 
     private function __construct()
     {
         try {
-            $this->connection = new PDO(
-                "mysql:host={$_ENV['DB_CONNECTION']};dbname={$_ENV['DB_DATABASE']};charset=utf8",
-                $_ENV['DB_USERNAME'],
-                $_ENV['DB_PASSWORD']
+            $this->config = DatabaseConfig::load();
+
+            $dsn = sprintf(
+                "mysql:host=%s;port=%s;dbname=%s;charset=%s",
+                $this->config['host'],
+                $this->config['port'],
+                $this->config['database'],
+                $this->config['charset']
             );
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $this->connection = new PDO(
+                $dsn,
+                $this->config['username'],
+                $this->config['password'],
+                $this->config['options']
+            );
         } catch (PDOException $e) {
-            throw new RuntimeException("An error has ocurred and cannot connect to the database:{$e->getMessage()}", 503, $e);
+            saveLog($e);
+            throw new RuntimeException("Database connection error: {$e->getMessage()}", 503, $e);
         } catch (Throwable $th) {
-            throw new RuntimeException("An error has ocurred and cannot connect to the database:{$th->getMessage()}", 503, $th);
+            saveLog($th);
+            throw new RuntimeException("Unexpected error in database connection: {$th->getMessage()}", 503, $th);
         }
     }
 
@@ -40,28 +53,33 @@ class Connection
         return self::$instance;
     }
 
-    public static function beginTransaction(): void
+    public static function beginTransaction(): bool
     {
-        self::getInstance()->beginTransaction();
+        return self::getInstance()->beginTransaction();
     }
 
-    public static function commit(): void
+    public static function commit(): bool
     {
-        self::getInstance()->commit();
+        return self::getInstance()->commit();
     }
 
-    public static function rollback(): void
+    public static function rollback(): bool
     {
-        self::getInstance()->rollBack();
+        return self::getInstance()->rollBack();
     }
 
-    public function prepare(string $sql): PDOStatement
+    public static function prepare(string $sql): PDOStatement
     {
         return self::getInstance()->prepare($sql);
     }
 
-    public function lastInsertId(): string
+    public static function lastInsertId(): string
     {
         return self::getInstance()->lastInsertId();
+    }
+
+    public static function close(): void
+    {
+        self::$instance = null;
     }
 }
