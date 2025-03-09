@@ -89,30 +89,9 @@ class App
                 throw $e;
             }
 
-            $this->saveLog($e);
+            saveLog($e);
             $response = new Response('json', 'Internal Server Error', 500);
             $response->returnData();
         }
-    }
-
-    private function saveLog($exception): void
-    {
-        $log_dir = $_ENV['ROOT_PROJECT'] . '/logs/';
-
-        if (!is_dir($log_dir)) {
-            mkdir($log_dir);
-        }
-
-        $data = [
-            'DATE' => date('Y-m-d H:i:s'),
-            'ENDPOINT'  => $_SERVER['REQUEST_URI'] ?? '',
-            'METHOD' => $_SERVER['REQUEST_METHOD'] ?? '',
-            'MESSAGE_ERROR' => $exception->getMessage(),
-            'TRACE' => $exception->getTrace()[0]
-        ];
-
-        $log_file = $log_dir . 'logs-' . date('Y-m-d') . '.log';
-
-        file_put_contents($log_file, json_encode($data, JSON_PRETTY_PRINT) . PHP_EOL, FILE_APPEND);
     }
 }
