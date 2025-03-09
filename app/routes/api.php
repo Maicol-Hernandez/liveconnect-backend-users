@@ -26,3 +26,5 @@ Router::get('/api/v1/pets', PetController::class . '@index');
 Router::post('/api/v1/login', AuthController::class . '@login');
 // Register
 Router::post('/api/v1/register', AuthController::class . '@register');
+// logout
+Router::post('/api/v1/logout', AuthController::class . '@logout', BasicAuth::class);

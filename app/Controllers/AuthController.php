@@ -19,11 +19,9 @@ class AuthController
     {
         $currentTime = $issuedAt ?? time();
         $payload = [
-            'data' => [
-                'id' => $user['id'],
-            ],
+            'data' => $user,
             'iat' => $currentTime,
-            'exp' => $currentTime + $expiresIn // Token válido por el tiempo especificado
+            'exp' => $currentTime + $expiresIn
         ];
 
         return JWT::encode($payload, $_ENV['JWT_KEY'], 'HS256');
@@ -82,5 +80,12 @@ class AuthController
             Connection::getInstance()->rollback();
             throw new HttpException($th->getMessage(), 500, $th);
         }
+    }
+
+    public function logout(Request $request): Response
+    {
+        // TODO: implement logic for blacklisting tokens
+
+        return view('json', 'Logged out successfully', 200);
     }
 }
