@@ -72,7 +72,9 @@ class AuthController
 
             Connection::getInstance()->commit();
 
-            return view('json', $user, 201);
+            $token = $this->generateJwtToken($user, time());
+
+            return view('json', [...$user, 'token' => $token], 201);
         } catch (Throwable $th) {
             Connection::getInstance()->rollback();
             throw new HttpException($th->getMessage(), 500, $th);
