@@ -2,7 +2,6 @@
 
 namespace App\Middleware;
 
-use Exception;
 use Throwable;
 use App\Request;
 use Firebase\JWT\JWT;
