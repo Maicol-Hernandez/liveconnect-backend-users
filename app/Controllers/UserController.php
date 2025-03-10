@@ -28,6 +28,8 @@ class UserController extends Controller
                 fn(array $user) => $user['id'] !== $request->userId()
             );
 
+            $users = array_values($users);
+
             return view('json', $users, 200);
         } catch (Exception $e) {
             throw new HttpException($e->getMessage(), 500, $e);
