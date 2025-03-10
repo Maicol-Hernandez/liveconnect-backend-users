@@ -18,12 +18,17 @@ use Throwable;
 class UserController extends Controller
 {
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
         try {
             $users = User::getAll();
 
-            return view('json',  $users, 200);
+            $users = array_filter(
+                $users,
+                fn(array $user) => $user['id'] !== $request->userId()
+            );
+
+            return view('json', $users, 200);
         } catch (Exception $e) {
             throw new HttpException($e->getMessage(), 500, $e);
         }
