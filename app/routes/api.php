@@ -13,11 +13,11 @@ Router::get('/', function () {
 });
 
 // user
-Router::get('/api/v1/users', UserController::class . '@index'); //, AdminAuth::class
+Router::get('/api/v1/users', UserController::class . '@index', BasicAuth::class); //, AdminAuth::class
 Router::post('/api/v1/users', UserController::class . '@store');
-Router::get('/api/v1/users/(?<id>\d+)', UserController::class . '@show');
-Router::put('/api/v1/users/(?<id>\d+)', UserController::class . '@update'); //, BasicAuth::class
-Router::delete('/api/v1/users/(?<id>\d+)', UserController::class . '@destroy'); //, AdminAuth::class
+Router::get('/api/v1/users/(?<id>\d+)', UserController::class . '@show', BasicAuth::class);
+Router::put('/api/v1/users/(?<id>\d+)', UserController::class . '@update', BasicAuth::class);
+Router::delete('/api/v1/users/(?<id>\d+)', UserController::class . '@destroy', BasicAuth::class); //, AdminAuth::class
 
 // Pets
 Router::get('/api/v1/pets', PetController::class . '@index');
