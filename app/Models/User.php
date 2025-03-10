@@ -64,20 +64,21 @@ class User
         $tableName = self::TABLE;
 
         $user = self::findById($userId);
-        if ($user['email'] !== $userDetails['email']) {
-            self::existsByEmail($userDetails['email']);
-        }
+        // if ($user['email'] !== $userDetails['email']) {
+        //     self::existsByEmail($userDetails['email']);
+        // }
 
-        $hashedPassword = password_hash($userDetails['password'], PASSWORD_DEFAULT);
+        // $hashedPassword = password_hash($userDetails['password'], PASSWORD_DEFAULT);
 
         $updateQuery = Connection::getInstance()->prepare(
-            "UPDATE {$tableName} SET name = :name, email = :email, password = :password WHERE id = :id"
+            "UPDATE {$tableName} SET name = :name WHERE id = :id"
+            // "UPDATE {$tableName} SET name = :name, email = :email, password = :password WHERE id = :id"
         );
 
         $updateQuery->execute([
             ':name' => $userDetails['name'],
-            ':email' => $userDetails['email'],
-            ':password' => $hashedPassword,
+            // ':email' => $userDetails['email'],
+            // ':password' => $hashedPassword,
             ':id' => $userId,
         ]);
 

@@ -78,8 +78,8 @@ class UserController extends Controller
     {
         $validator = new Validator($request->all(), [
             'name' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'password'],
+            // 'email' => ['required', 'email'],
+            // 'password' => ['required', 'password'],
             "pets" => ['required', 'array'],
         ]);
 
@@ -89,12 +89,14 @@ class UserController extends Controller
         try {
             $userData = [
                 'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'password' => $request->input('password'),
+                // 'email' => $request->input('email'),
+                // 'password' => $request->input('password'),
             ];
 
             $user = User::update($id, $userData);
             PetUser::updateBulk($user['id'], $request->input('pets'));
+
+            $user['pets'] = User::getPetsForUser($user['id']);
 
             Connection::getInstance()->commit();
 
