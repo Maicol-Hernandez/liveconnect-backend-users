@@ -11,6 +11,7 @@ use App\Models\PetUser;
 use App\Database\Connection;
 use App\Validation\Validator;
 use App\Exceptions\HttpException;
+use Exception;
 
 class AuthController
 {
@@ -36,19 +37,15 @@ class AuthController
 
         $validator->validate();
 
-        try {
-            $user = User::findByEmail($request->get('email'));
+        $user = User::findByEmail($request->get('email'));
 
-            if (!User::verifyPassword($user, $request->get('password'))) {
-                throw new HttpException("Invalid user or password", 400);
-            }
-
-            $token = $this->generateJwtToken($user, time());
-
-            return view('json', [...$user, 'token' => $token], 200);
-        } catch (Throwable $th) {
-            throw new HttpException($th->getMessage(), 500, $th);
+        if (!User::verifyPassword($user, $request->get('password'))) {
+            throw new HttpException("Invalid user or password", 400);
         }
+
+        $token = $this->generateJwtToken($user, time());
+
+        return view('json', [...$user, 'token' => $token], 200);
     }
 
     public function register(Request $request): Response
