@@ -39,7 +39,7 @@ class AuthController
         try {
             $user = User::findByEmail($request->get('email'));
 
-            if (User::verifyPassword($user, $request->get('password'))) {
+            if (!User::verifyPassword($user, $request->get('password'))) {
                 throw new HttpException("Invalid user or password", 400);
             }
 

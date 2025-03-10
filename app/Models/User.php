@@ -132,11 +132,11 @@ class User
         }
     }
 
-    public static function verifyPassword(array $user, string $password): bool
+    public static function verifyPassword(array $user, string $providedPassword): bool
     {
         $hashedPassword = $user['password'];
+        $isValid = password_verify($providedPassword, $hashedPassword);
 
-        return password_verify($password, $hashedPassword) &&
-            password_needs_rehash($hashedPassword, PASSWORD_DEFAULT);
+        return $isValid;
     }
 }
