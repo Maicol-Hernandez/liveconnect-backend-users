@@ -30,6 +30,8 @@ class UserController extends Controller
 
             $users = array_values($users);
 
+            $this->addPetsToUsers($users);
+
             return view('json', $users, 200);
         } catch (Exception $e) {
             throw new HttpException($e->getMessage(), 500, $e);
@@ -108,5 +110,12 @@ class UserController extends Controller
         User::delete($id);
 
         return view('json', 'User deleted', 200);
+    }
+
+    private function addPetsToUsers(array &$users): void
+    {
+        foreach ($users as &$user) {
+            $user['pets'] = User::getPetsForUser($user['id']);
+        }
     }
 }

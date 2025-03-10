@@ -11,7 +11,6 @@ use App\Models\PetUser;
 use App\Database\Connection;
 use App\Validation\Validator;
 use App\Exceptions\HttpException;
-use Exception;
 
 class AuthController
 {

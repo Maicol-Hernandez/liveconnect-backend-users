@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use PDO;
 use Exception;
 use App\Models\Pet;
 use App\Database\Connection;
@@ -65,5 +66,21 @@ class PetUser
     public static function updateBulk(int $userId, array $petIds): bool
     {
         return self::deleteBulk($userId) && self::createBulk($userId, $petIds);
+    }
+
+    public static function getPetsForUser(int $userId): array
+    {
+        $query = sprintf(
+            'SELECT pets.* FROM pets JOIN %s ON pets.id = %s.pet_id WHERE %s.user_id = :user_id',
+            self::TABLE,
+            self::TABLE,
+            self::TABLE
+        );
+
+        $statement = Connection::getInstance()->prepare($query);
+        $statement->bindValue(':user_id', $userId, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

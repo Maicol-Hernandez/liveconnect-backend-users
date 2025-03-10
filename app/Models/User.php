@@ -23,6 +23,11 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function getPetsForUser(int $userId): array
+    {
+        return PetUser::getPetsForUser($userId);
+    }
+
     public static function existsByEmail(string $email): bool
     {
         $table = self::TABLE;
